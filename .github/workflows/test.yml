@@ -40,9 +40,11 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: a
+          path: out
       - uses: actions/download-artifact@v2
         with:
           name: b
+          path: out
       - run: |
           ls -lah out
           cat out/a
