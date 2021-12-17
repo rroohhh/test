@@ -1,0 +1,49 @@
+name: test
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  gen_a:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: |
+          mkdir out
+          echo a > out/a
+      - uses: actions/upload-artifact@v2
+        with:
+          name: a
+          path: out
+
+  gen_b:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: gen
+        run: |
+          mkdir out
+          echo b > out/b
+      - uses: actions/upload-artifact@v2
+        with:
+          name: b
+          path: out
+
+  finalize:
+    needs:
+      - gen_a
+      - gen_b
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: a
+      - uses: actions/download-artifact@v2
+        with:
+          name: b
+      - run: |
+          ls -lah out
+          cat out/a
+          cat out/b
